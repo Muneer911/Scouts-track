@@ -1,0 +1,221 @@
+{
+  "hero": {
+    "title": "Elevate Your Scouts Organization",
+    "subtitle": "A refined platform designed for modern scout leaders. Manage teams effortlessly, track progress seamlessly, and nurture stronger communities—all in one elegant interface.",
+    "cta": "Get Started",
+    "ctaSecondary": "Sign In",
+    "trustedBy": "Trusted by 500+ organizations"
+  },
+  "problemSolution": {
+    "title": "From Chaos to Clarity",
+    "problem": {
+      "title": "Common Challenges",
+      "items": [
+        "Managing multiple teams and groups manually",
+        "Tracking activities and missions across different locations",
+        "Generating reports and performance insights",
+        "Coordinating communication between leaders and scouts"
+      ]
+    },
+    "solution": {
+      "title": "Our Solution",
+      "description": "A comprehensive platform designed specifically for scouts organizations. Manage teams, track activities, generate insights, and foster collaboration—all in one intuitive interface."
+    }
+  },
+  "features": {
+    "title": "Designed for Excellence",
+    "subtitle": "Thoughtfully crafted features that empower scout leaders",
+    "items": [
+      {
+        "title": "Team & Group Management",
+        "description": "Organize scouts into teams and groups with easy member management and role assignments."
+      },
+      {
+        "title": "Activity & Mission Tracking",
+        "description": "Plan, schedule, and track activities and missions with real-time updates and progress monitoring."
+      },
+      {
+        "title": "Performance Reports",
+        "description": "Generate simple, actionable reports on scout participation, achievements, and team performance."
+      },
+      {
+        "title": "Collaboration & Communication",
+        "description": "Keep everyone connected with built-in messaging, announcements, and shared calendars."
+      }
+    ]
+  },
+  "howItWorks": {
+    "title": "Get Started in 3 Simple Steps",
+    "steps": [
+      {
+        "number": "1",
+        "title": "Create an Account",
+        "description": "Sign up in seconds with your email. No credit card required."
+      },
+      {
+        "number": "2",
+        "title": "Add Teams & Activities",
+        "description": "Set up your scout groups and start adding activities and missions."
+      },
+      {
+        "number": "3",
+        "title": "Track Progress & Reports",
+        "description": "Monitor participation, generate reports, and watch your organization thrive."
+      }
+    ]
+  },
+  "trust": {
+    "title": "Trusted by Scout Leaders",
+    "subtitle": "Join organizations that have transformed their operations",
+    "stats": [
+      {
+        "value": "500+",
+        "label": "Active Organizations"
+      },
+      {
+        "value": "50K+",
+        "label": "Scouts Managed"
+      },
+      {
+        "value": "99.9%",
+        "label": "Uptime"
+      }
+    ]
+  },
+  "finalCta": {
+    "title": "Begin Your Journey",
+    "subtitle": "Experience the difference that thoughtful design and powerful features can make.",
+    "cta": "Start Free Trial",
+    "ctaSecondary": "Schedule Demo"
+  },
+  "nav": {
+    "brand": "Scouts Platform",
+    "features": "Features",
+    "howItWorks": "How It Works",
+    "contact": "Contact"
+  },
+  "common": {
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "confirm": "Confirm",
+      "edit": "Edit",
+      "create": "Create",
+      "add": "Add",
+      "close": "Close"
+    },
+    "status": {
+      "loading": "Loading...",
+      "success": "Success",
+      "error": "Error",
+      "empty": "No data available"
+    }
+  },
+  "auth": {
+    "backToHome": "Back to Home",
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "newHere": "New here?",
+      "createAccount": "Create an account",
+      "errors": {
+        "invalidEmail": "Please enter a valid email.",
+        "shortPassword": "Password must be at least 6 characters."
+      }
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Start your journey with Scouts Platform.",
+      "name": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Create account",
+      "submitting": "Creating account…",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "errors": {
+        "invalidName": "Please enter your name.",
+        "invalidEmail": "Please enter a valid email.",
+        "shortPassword": "Password must be at least 6 characters."
+      }
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "brand": "Scouts Platform",
+      "dashboard": "Dashboard",
+      "overview": "Overview",
+      "teams": "Teams",
+      "activities": "Activities",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "topbar": {
+      "logout": "Logout",
+      "admin": "Admin"
+    },
+    "overview": {
+      "activeTeams": "Active teams",
+      "scoutsEnrolled": "Scouts enrolled",
+      "scheduledActivities": "Scheduled activities",
+      "completionRate": "Completion rate",
+      "recentActivity": "Recent activity",
+      "atAGlance": "At a glance",
+      "upcomingEvents": "Upcoming events",
+      "reportsAwaiting": "Reports awaiting review",
+      "unreadMessages": "Messages unread"
+    },
+    "teams": {
+      "title": "Teams",
+      "directory": "Team directory",
+      "addTeam": "Add team",
+      "team": "Team",
+      "members": "Members",
+      "lead": "Lead",
+      "region": "Region"
+    },
+    "activities": {
+      "title": "Activities & Missions",
+      "pipeline": "Activity pipeline",
+      "addActivity": "Add activity",
+      "date": "Date",
+      "team": "Team",
+      "status": {
+        "scheduled": "Scheduled",
+        "planned": "Planned",
+        "draft": "Draft",
+        "inProgress": "In progress"
+      }
+    },
+    "reports": {
+      "title": "Reports",
+      "generate": "Generate report",
+      "status": {
+        "ready": "Ready",
+        "inReview": "In review",
+        "draft": "Draft"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "profile": {
+        "title": "Profile",
+        "subtitle": "Update basic information.",
+        "save": "Save changes"
+      },
+      "notifications": {
+        "title": "Notifications",
+        "subtitle": "Control email alerts.",
+        "weeklySummaries": "Weekly summaries",
+        "activityAlerts": "Activity alerts",
+        "save": "Save preferences"
+      }
+    }
+  }
+}
+

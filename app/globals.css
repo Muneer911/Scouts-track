@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Luxury Scouts Color Palette */
+  --scout-green: #1a3d0f;
+  --scout-green-light: #2d5016;
+  --scout-green-lighter: #4a7c2a;
+  --scout-green-accent: #5a8a3d;
+  --scout-gold: #d4af37;
+  --scout-gold-light: #e8d5a3;
+  --scout-gold-accent: #c9a028;
+  --scout-blue: #3b82f6;
+  --scout-blue-light: #60a5fa;
+  --scout-neutral: #faf9f7;
+  --scout-neutral-dark: #f5f3f0;
+  --scout-gray: #6b7280;
+  --scout-gray-light: #9ca3af;
+  --scout-gray-lighter: #e5e7eb;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Luxury Scouts Color Palette - Registered for Tailwind v4 */
+  --color-scout-green: var(--scout-green);
+  --color-scout-green-light: var(--scout-green-light);
+  --color-scout-green-lighter: var(--scout-green-lighter);
+  --color-scout-green-accent: var(--scout-green-accent);
+  --color-scout-gold: var(--scout-gold);
+  --color-scout-gold-light: var(--scout-gold-light);
+  --color-scout-gold-accent: var(--scout-gold-accent);
+  --color-scout-blue: var(--scout-blue);
+  --color-scout-blue-light: var(--scout-blue-light);
+  --color-scout-neutral: var(--scout-neutral);
+  --color-scout-neutral-dark: var(--scout-neutral-dark);
+  --color-scout-gray: var(--scout-gray);
+  --color-scout-gray-light: var(--scout-gray-light);
+  --color-scout-gray-lighter: var(--scout-gray-lighter);
+
+  /* Fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-arabic: var(--font-cairo);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Arabic font support */
+html[dir="rtl"] {
+  font-family: var(--font-cairo), "Segoe UI Arabic", system-ui, sans-serif;
+  font-size: 105%; /* Slightly larger for Arabic readability */
+  line-height: 1.75; /* Better line height for Arabic */
+}
+
+html[dir="rtl"] body {
+  font-family: var(--font-cairo), "Segoe UI Arabic", system-ui, sans-serif;
+}
+
+/* Ensure no letter-spacing for Arabic */
+html[dir="rtl"] * {
+  letter-spacing: 0 !important;
+}
+
+/* Smooth transitions for language switching */
+html {
+  transition: direction 0.2s ease;
+}
