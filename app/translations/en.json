@@ -125,7 +125,8 @@
       "createAccount": "Create an account",
       "errors": {
         "invalidEmail": "Please enter a valid email.",
-        "shortPassword": "Password must be at least 6 characters."
+        "shortPassword": "Password must be at least 6 characters.",
+        "invalidCredentials": "Invalid email or password."
       }
     },
     "register": {
@@ -141,8 +142,16 @@
       "errors": {
         "invalidName": "Please enter your name.",
         "invalidEmail": "Please enter a valid email.",
-        "shortPassword": "Password must be at least 6 characters."
+        "shortPassword": "Password must be at least 6 characters.",
+        "emailExists": "An account with this email already exists.",
+        "signupFailed": "Failed to create account. Please try again."
       }
+    },
+    "confirm": {
+      "title": "Check your email",
+      "subtitle": "We sent you a confirmation link",
+      "description": "Please check your email and click the confirmation link to activate your account.",
+      "backToLogin": "Back to login"
     }
   },
   "dashboard": {
