@@ -1,8 +1,11 @@
 'use server';
 
-import { createSession } from '@/lib/auth';
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
 
 export async function loginAction(formData: FormData) {
+  const supabase = await createClient();
+
   const email = (formData.get('email') as string)?.trim();
   const password = (formData.get('password') as string)?.trim();
 
@@ -13,7 +16,15 @@ export async function loginAction(formData: FormData) {
     return { error: 'auth.login.errors.shortPassword' };
   }
 
-  await createSession({ email, name: email.split('@')[0] });
-  return { success: true };
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    return { error: 'auth.login.errors.invalidCredentials' };
+  }
+
+  redirect('/dashboard');
 }
 
