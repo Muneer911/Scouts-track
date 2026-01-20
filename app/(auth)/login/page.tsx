@@ -17,13 +17,12 @@ export default function LoginPage() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError(null);
     const formData = new FormData(event.currentTarget);
     startTransition(async () => {
       const result = await loginAction(formData);
       if (result?.error) {
         setError(t(result.error));
-      } else {
-        window.location.href = '/dashboard';
       }
     });
   };

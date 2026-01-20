@@ -14,13 +14,12 @@ export default function RegisterPage() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError(null);
     const formData = new FormData(event.currentTarget);
     startTransition(async () => {
       const result = await registerAction(formData);
       if (result?.error) {
         setError(t(result.error));
-      } else {
-        window.location.href = '/dashboard';
       }
     });
   };
