@@ -2,48 +2,89 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useLanguage } from '@/app/contexts/LanguageContext';
 import { useTranslation } from '@/app/hooks/useTranslation';
 import { cn } from '@/lib/utils';
+import {
+  Home,
+  Users,
+  Calendar,
+  Settings,
+  LogOut,
+  Plus,
+} from 'lucide-react';
+import { logoutAction } from '@/app/actions/logout';
 
 const navItems = [
-  { href: '/dashboard', key: 'overview' },
-  { href: '/dashboard/teams', key: 'teams' },
-  { href: '/dashboard/activities', key: 'activities' },
-  { href: '/dashboard/reports', key: 'reports' },
-  { href: '/dashboard/settings', key: 'settings' },
+  { href: '/dashboard', key: 'overview', icon: Home },
+  { href: '/dashboard/teams', key: 'teams', icon: Users, hasAdd: true },
+  { href: '/dashboard/activities', key: 'activities', icon: Calendar, hasAdd: true },
+  { href: '/dashboard/settings', key: 'settings', icon: Settings },
 ];
 
 export function Sidebar() {
   const { t } = useTranslation();
   const pathname = usePathname();
-  const { isRTL } = useLanguage();
+
+  const handleLogout = async () => {
+    await logoutAction();
+  };
 
   return (
-    <aside className="hidden lg:flex w-64 shrink-0 flex-col gap-2 border-e border-scout-gray-lighter bg-white/60 backdrop-blur-sm p-4">
-      <div className="px-2 py-4">
-        <div className="text-xl font-light text-scout-green">{t('dashboard.sidebar.brand')}</div>
-        <div className="text-sm text-scout-gray">{t('dashboard.sidebar.dashboard')}</div>
+    <aside className="hidden lg:flex w-64 shrink-0 flex-col border-e border-border bg-sidebar">
+      {/* Logo */}
+      <div className="p-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+            <span className="text-xl font-bold text-primary-foreground">S</span>
+          </div>
+          <span className="text-lg font-semibold text-sidebar-foreground">
+            Scanance
+          </span>
+        </div>
       </div>
-      <nav className="flex-1 space-y-1">
-        {navItems.map((item) => {
-          const active = pathname === item.href;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all',
-                active
-                  ? 'bg-gradient-to-e from-scout-green/10 to-scout-green/5 text-scout-green font-medium border border-scout-green/40 shadow-sm'
-                  : 'text-scout-gray hover:text-scout-green hover:bg-scout-green/5 hover:border hover:border-scout-green/20'
-              )}
-            >
-              <span className={isRTL ? 'order-2' : ''}>{t(`dashboard.sidebar.${item.key}`)}</span>
-            </Link>
-          );
-        })}
+
+      {/* Navigation */}
+      <nav className="flex-1 px-4">
+        <ul className="space-y-1">
+          {navItems.map((item) => {
+            const active = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href));
+            const Icon = item.icon;
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={cn(
+                    'w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors',
+                    active
+                      ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                      : 'text-sidebar-foreground hover:bg-sidebar-accent/50'
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon className="w-5 h-5" />
+                    <span>{t(`dashboard.sidebar.${item.key}`)}</span>
+                  </div>
+                  {item.hasAdd && (
+                    <Plus className="w-4 h-4 text-muted-foreground" />
+                  )}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </nav>
+
+      {/* Bottom Links */}
+      <div className="border-t border-sidebar-border p-4 space-y-1">
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2 text-sm text-sidebar-foreground hover:bg-sidebar-accent/50 rounded-lg"
+        >
+          <LogOut className="w-5 h-5" />
+          {t('dashboard.sidebar.logout')}
+        </button>
+      </div>
     </aside>
   );
 }

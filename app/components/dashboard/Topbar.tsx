@@ -1,31 +1,64 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useTranslation } from '@/app/hooks/useTranslation';
 import { LanguageToggle } from '@/app/components/ui/LanguageToggle';
-import { logoutAction } from '@/app/actions/logout';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { createClient } from '@/lib/supabase/client';
 
-export function Topbar({ title }: { title: string }) {
+export function Topbar() {
   const { t } = useTranslation();
+  const [userName, setUserName] = useState('User');
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+
+  useEffect(() => {
+    async function fetchUserName() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('profile_uuid', user.id)
+          .single();
+        
+        if (profile?.full_name) {
+          setUserName(profile.full_name);
+        }
+      }
+    }
+    
+    fetchUserName();
+  }, []);
+
+  const firstName = userName.split(' ')[0];
+
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between gap-4 bg-white/90 backdrop-blur-md border-b border-scout-gray-lighter px-4 sm:px-6 py-3 relative">
-      {/* Subtle accent line */}
-      <div className="absolute top-0 start-0 end-0 h-0.5 bg-gradient-to-e from-scout-green/30 via-scout-green-lighter/20 to-transparent" />
-      <div>
-        <h1 className="text-xl sm:text-2xl font-light text-scout-green">{title}</h1>
-        <p className="text-sm text-scout-gray">{t('dashboard.sidebar.brand')}</p>
-      </div>
-      <div className="flex items-center gap-3">
-        <LanguageToggle />
-        <form action={logoutAction} className="flex items-center gap-2 rounded-full border border-scout-gray-lighter px-3 py-1 bg-white">
-          <div className="w-8 h-8 rounded-full bg-scout-neutral border border-scout-gray-lighter" />
-          <span className="text-sm text-scout-gray">{t('dashboard.topbar.admin')}</span>
-          <button
-            type="submit"
-            className="text-xs text-scout-gray hover:text-scout-green transition"
-          >
-            {t('dashboard.topbar.logout')}
-          </button>
-        </form>
+    <header className="border-b border-border px-6 py-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">
+            {t('dashboard.greeting')}, {firstName}
+          </h1>
+          <p className="text-muted-foreground">
+            {t('dashboard.trackProgress')}
+          </p>
+        </div>
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-muted-foreground hidden sm:block">{formattedDate}</span>
+          <LanguageToggle />
+          <Avatar className="w-10 h-10 border-2 border-primary">
+            <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+              {userName.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+        </div>
       </div>
     </header>
   );
