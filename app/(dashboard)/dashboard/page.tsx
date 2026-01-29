@@ -1,72 +1,107 @@
 'use client';
 
 import { PageShell } from '@/app/components/dashboard/PageShell';
-import { StatCard } from '@/app/components/dashboard/StatCard';
+import { UpcomingEvents } from '@/app/components/dashboard/UpcomingEvents';
+import { AttendanceTrend } from '@/app/components/dashboard/AttendanceTrend';
 import { useTranslation } from '@/app/hooks/useTranslation';
+import { Card, CardContent } from '@/components/ui/card';
+import { Users, UsersRound, TrendingUp } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { getDashboardStats, getUpcomingEvents } from '@/app/actions/dashboard';
 
-const timeline = [
-  { title: 'Outdoor survival workshop', date: 'Mar 18', status: 'inProgress' },
-  { title: 'Community service day', date: 'Mar 20', status: 'planned' },
-  { title: 'Leadership camp', date: 'Mar 24', status: 'planned' },
-];
+import { DEMO_ATTENDANCE_TREND } from '@/lib/demoData';
 
 export default function DashboardOverviewPage() {
   const { t } = useTranslation();
 
-  const stats = [
-    { label: t('dashboard.overview.activeTeams'), value: '12', hint: '+2 this month' },
-    { label: t('dashboard.overview.scoutsEnrolled'), value: '248', hint: '+18 this week' },
-    { label: t('dashboard.overview.scheduledActivities'), value: '36', hint: 'Across 4 regions' },
-    { label: t('dashboard.overview.completionRate'), value: '92%', hint: 'Last 30 days' },
-  ];
+  const [stats, setStats] = useState<{ totalScouts: number; activeTeams: number; attendanceRate: number } | null>(null);
+  const [events, setEvents] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const [statsRes, eventsRes] = await Promise.all([getDashboardStats(), getUpcomingEvents()]);
+      setStats(statsRes);
+      setEvents(eventsRes as any[]);
+    }
+
+    fetchData();
+  }, []);
+
+  const upcomingEvents = useMemo(() => {
+    return (events || []).map((e) => {
+      const date = e.activity_date
+        ? new Date(e.activity_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        : '';
+      const time = e.start_time ? String(e.start_time).slice(0, 5) : '';
+      return {
+        id: e.id,
+        title: e.title,
+        date,
+        time,
+      };
+    });
+  }, [events]);
 
   return (
     <PageShell title={t('dashboard.sidebar.overview')}>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
-        {stats.map((stat) => (
-          <StatCard key={stat.label} label={stat.label} value={stat.value} hint={stat.hint} />
-        ))}
+      {/* Stats Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                <Users className="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">{t('dashboard.overview.totalScouts')}</p>
+                <p className="text-3xl font-bold text-foreground">{stats?.totalScouts ?? '—'}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border-emerald-500/20">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                <UsersRound className="w-6 h-6 text-emerald-600" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">{t('dashboard.overview.activeTeams')}</p>
+                <p className="text-3xl font-bold text-foreground">{stats?.activeTeams ?? '—'}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-500/5 border-amber-500/20 sm:col-span-2 lg:col-span-1">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                <TrendingUp className="w-6 h-6 text-amber-600" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">{t('dashboard.overview.attendanceRate')}</p>
+                <p className="text-3xl font-bold text-foreground">{stats ? `${stats.attendanceRate}%` : '—'}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <div className="rounded-2xl border border-scout-gray-lighter bg-white p-6 shadow-sm hover:shadow-md hover:border-scout-green/30 transition-all relative overflow-hidden">
-          {/* Subtle accent line */}
-          <div className="absolute top-0 start-0 end-0 h-1 bg-gradient-to-e from-scout-green/40 via-scout-green-lighter/30 to-transparent" />
-          <h3 className="text-lg font-medium text-scout-green mb-4">{t('dashboard.overview.recentActivity')}</h3>
-          <ul className="space-y-4">
-            {timeline.map((item) => (
-              <li key={item.title} className="flex items-center justify-between hover:bg-scout-green/5 p-2 rounded-lg transition-colors group">
-                <div>
-                  <div className="text-scout-green font-medium group-hover:text-scout-green-light transition-colors">{item.title}</div>
-                  <div className="text-sm text-scout-gray">{item.date}</div>
-                </div>
-                <span className="text-xs px-3 py-1 rounded-full bg-gradient-to-r from-scout-neutral to-white border border-scout-gray-lighter text-scout-gray group-hover:border-scout-green/30 transition-colors">
-                  {t(`dashboard.activities.status.${item.status}`)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Upcoming Events */}
+        <UpcomingEvents
+          events={upcomingEvents}
+          title={t('dashboard.overview.upcomingEvents')}
+        />
 
-        <div className="rounded-2xl border border-scout-gray-lighter bg-white p-6 shadow-sm hover:shadow-md hover:border-scout-green/30 transition-all relative overflow-hidden">
-          {/* Subtle accent line */}
-          <div className="absolute top-0 start-0 end-0 h-1 bg-gradient-to-e from-scout-green/40 via-scout-green-lighter/30 to-transparent" />
-          <h3 className="text-lg font-medium text-scout-green mb-4">{t('dashboard.overview.atAGlance')}</h3>
-          <div className="space-y-4 text-scout-gray">
-            <div className="flex items-center justify-between hover:bg-scout-green/5 p-2 rounded-lg transition-colors group">
-              <span>{t('dashboard.overview.upcomingEvents')}</span>
-              <span className="text-scout-green font-medium group-hover:text-scout-green-light transition-colors">8</span>
-            </div>
-            <div className="flex items-center justify-between hover:bg-scout-green/5 p-2 rounded-lg transition-colors group">
-              <span>{t('dashboard.overview.reportsAwaiting')}</span>
-              <span className="text-scout-green font-medium group-hover:text-scout-green-light transition-colors">3</span>
-            </div>
-            <div className="flex items-center justify-between hover:bg-scout-green/5 p-2 rounded-lg transition-colors group">
-              <span>{t('dashboard.overview.unreadMessages')}</span>
-              <span className="text-scout-green font-medium group-hover:text-scout-green-light transition-colors">12</span>
-            </div>
-          </div>
-        </div>
+        {/* Attendance Trend */}
+        <AttendanceTrend
+          data={[...DEMO_ATTENDANCE_TREND]}
+          title={t('dashboard.overview.attendanceTrend')}
+        />
       </div>
     </PageShell>
   );
