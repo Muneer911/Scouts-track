@@ -3,15 +3,13 @@
 import Link from 'next/link';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Section } from '../ui/Section';
-import { Button } from '../ui/Button';
+import { Button } from '@/components/ui/button';
 
 export function FinalCTA() {
   const { t } = useTranslation();
 
   return (
-    <Section className="relative bg-gradient-to-br from-scout-green via-scout-green-light to-scout-green-accent text-white py-32 overflow-hidden">
-      {/* Subtle gold accent overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-scout-gold/5 to-scout-gold/10" />
+    <Section className="relative bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-primary-foreground py-32 overflow-hidden">
       {/* Subtle pattern overlay */}
       <div className="absolute inset-0 opacity-10" style={{
         backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
@@ -29,15 +27,15 @@ export function FinalCTA() {
           <Link href="/register">
             <Button
               variant="secondary"
-              className="bg-white text-scout-green border-white hover:bg-scout-neutral min-w-[200px] px-8 py-4 text-base shadow-lg"
+              className="bg-background text-foreground hover:bg-background/90 min-w-[200px] px-8 py-4 text-base shadow-lg"
             >
               {t('finalCta.cta')}
             </Button>
           </Link>
           <Link href="/login">
             <Button
-              variant="ghost"
-              className="text-white border-2 border-white/30 hover:border-white hover:bg-white/10 min-w-[200px] px-8 py-4 text-base"
+              variant="outline"
+              className="text-primary-foreground border-2 border-primary-foreground/30 hover:border-primary-foreground hover:bg-primary-foreground/10 min-w-[200px] px-8 py-4 text-base"
             >
               {t('finalCta.ctaSecondary')}
             </Button>

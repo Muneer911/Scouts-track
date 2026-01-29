@@ -2,6 +2,7 @@
 
 import { useTranslation } from '../../hooks/useTranslation';
 import { Section } from '../ui/Section';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface FeatureItem {
   title: string;
@@ -28,34 +29,37 @@ export function Features() {
   ];
 
   return (
-    <Section className="bg-white py-32">
+    <Section className="bg-background py-32">
       <div className="text-center mb-20">
-        <h2 className="text-4xl md:text-5xl font-light text-scout-green mb-6 tracking-tight">
+        <h2 className="text-4xl md:text-5xl font-light text-foreground mb-6 tracking-tight">
           {t('features.title')}
         </h2>
-        <p className="text-xl text-scout-gray max-w-2xl mx-auto font-light">
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-light">
           {t('features.subtitle')}
         </p>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         {features.map((feature, index) => (
-          <div
+          <Card
             key={index}
-            className="group bg-white rounded-2xl p-8 border border-scout-gray-lighter hover:border-scout-green/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+            className="group bg-card hover:border-primary/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden"
           >
-            {/* Subtle accent gradient on hover */}
-            <div className="absolute top-0 start-0 end-0 h-1 bg-gradient-to-e from-scout-green/50 via-scout-green-lighter/40 to-scout-gold/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-scout-neutral to-scout-green/5 flex items-center justify-center mb-6 text-scout-green group-hover:from-scout-green group-hover:to-scout-green-light group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-md">
-              {featureIcons[index]}
-            </div>
-            <h3 className="text-xl font-medium text-scout-green mb-3 group-hover:text-scout-green-light transition-colors">
-              {feature.title}
-            </h3>
-            <p className="text-scout-gray leading-relaxed font-light">
-              {feature.description}
-            </p>
-          </div>
+            <div className="absolute top-0 start-0 end-0 h-1 bg-gradient-to-r from-primary/50 via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <CardHeader>
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-muted to-primary/5 flex items-center justify-center mb-4 text-primary group-hover:from-primary group-hover:to-primary/80 group-hover:text-primary-foreground transition-all duration-300 shadow-sm group-hover:shadow-md">
+                {featureIcons[index]}
+              </div>
+              <CardTitle className="text-xl text-foreground group-hover:text-primary transition-colors">
+                {feature.title}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-muted-foreground leading-relaxed">
+                {feature.description}
+              </CardDescription>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </Section>

@@ -10,7 +10,7 @@ import { FinalCTA } from './components/landing/FinalCTA';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-background">
       <Navigation />
       <Hero />
       <ProblemSolution />
