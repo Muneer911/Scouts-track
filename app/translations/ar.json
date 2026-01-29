@@ -90,8 +90,9 @@
   },
   "nav": {
     "brand": "منصة الكشافة",
-    "features": "الميزات",
+    "features": "المميزات",
     "howItWorks": "كيف يعمل",
+    "pricing": "الأسعار",
     "contact": "اتصل بنا"
   },
   "common": {
@@ -162,14 +163,104 @@
       "teams": "الفرق",
       "activities": "الأنشطة",
       "reports": "التقارير",
-      "settings": "الإعدادات"
+      "medical": "الطبي",
+      "permissionSlips": "إذونات الخروج",
+      "settings": "الإعدادات",
+      "help": "المساعدة والمعلومات",
+      "logout": "تسجيل الخروج"
     },
     "topbar": {
       "logout": "تسجيل الخروج",
       "admin": "مشرف"
     },
+    "greeting": "مرحباً",
+    "trackProgress": "تتبع تقدم الفريق هنا. أنت على وشك تحقيق هدف!",
+    "welcome": {
+      "title": "مرحباً",
+      "subtitle": "أنت جاهز الآن. لنقم بإنشاء مساحة العمل الأولى والبدء في التعاون مع فريقك.",
+      "createWorkspace": "إنشاء مساحة العمل الأولى",
+      "createWorkspaceDesc": "تساعدك مساحات العمل على تنظيم المشاريع والمهام وأعضاء الفريق",
+      "createButton": "إنشاء مساحة عمل",
+      "inviteTeam": "دعوة أعضاء الفريق",
+      "inviteTeamDesc": "تعاون بشكل أفضل من خلال دعوة زملائك للانضمام",
+      "configureSettings": "تكوين الإعدادات",
+      "configureSettingsDesc": "خصص تفضيلات مساحة العمل والتكاملات",
+      "comingSoon": "قريباً",
+      "gettingStarted": "دليل البدء",
+      "gettingStartedDesc": "اتبع هذه الخطوات لإعداد مساحة العمل الخاصة بك",
+      "step1Title": "إنشاء مساحة عمل",
+      "step1Desc": "ابدأ بإنشاء مساحة العمل الأولى لتنظيم عملك",
+      "step2Title": "إضافة فريقك الأول",
+      "step2Desc": "أنشئ فرقاً لتجميع الكشافة والأنشطة",
+      "step3Title": "دعوة فريقك",
+      "step3Desc": "تعاون من خلال دعوة أعضاء الفريق إلى مساحة العمل"
+    },
+    "workspace": {
+      "createTitle": "إنشاء مساحة العمل",
+      "createDesc": "أعطِ مساحة العمل اسماً. يمكنك تغييره لاحقاً.",
+      "nameLabel": "اسم مساحة العمل",
+      "namePlaceholder": "أدخل اسم مساحة العمل",
+      "randomize": "توليد اسم عشوائي",
+      "randomizeHint": "انقر على زر التحديث لتوليد اسم عشوائي",
+      "creating": "جاري الإنشاء...",
+      "create": "إنشاء مساحة العمل"
+    },
+    "onboarding": {
+      "step": "الخطوة",
+      "of": "من",
+      "complete": "مكتمل",
+      "back": "رجوع",
+      "continue": "متابعة",
+      "getStarted": "ابدأ الآن",
+      "name": {
+        "title": "ما اسمك؟",
+        "subtitle": "دعنا نتعرف عليك بشكل أفضل",
+        "placeholder": "أدخل اسمك الكامل"
+      },
+      "role": {
+        "title": "ما هو دورك؟",
+        "subtitle": "أخبرنا عما تفعله",
+        "options": {
+          "manager": "مدير فريق",
+          "leader": "قائد فريق",
+          "member": "عضو فريق",
+          "executive": "تنفيذي",
+          "other": "أخرى"
+        }
+      },
+      "organization": {
+        "title": "ما اسم منظمتك؟",
+        "subtitle": "ساعدنا في تخصيص تجربتك",
+        "placeholder": "أدخل اسم المنظمة"
+      },
+      "orgType": {
+        "title": "ما نوع المنظمة؟",
+        "subtitle": "هذا يساعدنا في تخصيص الميزات لك",
+        "options": {
+          "scouts": "منظمة كشفية",
+          "school": "مدرسة",
+          "community": "مجموعة مجتمعية",
+          "nonprofit": "منظمة غير ربحية",
+          "other": "أخرى"
+        }
+      },
+      "teamSize": {
+        "title": "ما حجم فريقك؟",
+        "subtitle": "سنقوم بتحسين مساحة العمل لحجم فريقك",
+        "options": {
+          "small": "1-20 شخص",
+          "medium": "21-50 شخص",
+          "large": "51-100 شخص",
+          "xlarge": "101-500 شخص",
+          "enterprise": "500+ شخص"
+        }
+      }
+    },
     "overview": {
+      "totalScouts": "إجمالي الكشافة",
       "activeTeams": "الفرق النشطة",
+      "attendanceRate": "معدل الحضور",
+      "attendanceTrend": "اتجاه الحضور",
       "scoutsEnrolled": "الكشافة المسجلين",
       "scheduledActivities": "الأنشطة المجدولة",
       "completionRate": "معدل الإنجاز",
@@ -177,7 +268,9 @@
       "atAGlance": "نظرة سريعة",
       "upcomingEvents": "الأحداث القادمة",
       "reportsAwaiting": "التقارير في انتظار المراجعة",
-      "unreadMessages": "الرسائل غير المقروءة"
+      "unreadMessages": "الرسائل غير المقروءة",
+      "badgeProgress": "تقدم الشارات",
+      "systemMessages": "رسائل النظام"
     },
     "teams": {
       "title": "الفرق",
@@ -186,7 +279,60 @@
       "team": "الفريق",
       "members": "الأعضاء",
       "lead": "القائد",
-      "region": "المنطقة"
+      "region": "المنطقة",
+      "noTeams": "لا توجد فرق",
+      "createFirst": "أنشئ فريقك الأول",
+      "noSupervisor": "لا يوجد مشرف",
+      "noRegion": "لا توجد منطقة",
+      "notFound": "الفريق غير موجود",
+      "backToTeams": "العودة للفرق",
+      "addMember": "إضافة عضو",
+      "noMembers": "لا يوجد أعضاء في هذا الفريق",
+      "newTeam": "فريق جديد",
+      "newTeamDescription": "أنشئ فريقاً جديداً وابدأ بإضافة الأعضاء",
+      "teamName": "اسم الفريق",
+      "teamNamePlaceholder": "أدخل اسم الفريق",
+      "regionPlaceholder": "أدخل المنطقة",
+      "description": "الوصف",
+      "descriptionPlaceholder": "أدخل وصف الفريق",
+      "saveTeam": "حفظ الفريق",
+      "createError": "فشل في إنشاء الفريق",
+      "addMemberTitle": "إضافة عضو جديد",
+      "addMemberDescription": "أضف كشافاً جديداً لهذا الفريق",
+      "memberName": "الاسم الكامل",
+      "memberNamePlaceholder": "أدخل اسم العضو الكامل",
+      "dateOfBirth": "تاريخ الميلاد",
+      "parentName": "اسم ولي الأمر",
+      "parentNamePlaceholder": "أدخل اسم ولي الأمر",
+      "parentPhone": "هاتف ولي الأمر",
+      "parentPhonePlaceholder": "أدخل رقم الهاتف",
+      "parentEmail": "بريد ولي الأمر",
+      "parentEmailPlaceholder": "أدخل البريد الإلكتروني",
+      "saveMember": "حفظ العضو",
+      "memberCreateError": "فشل في إضافة العضو",
+      "ageRangeMin": "الحد الأدنى للعمر",
+      "ageRangeMax": "الحد الأقصى للعمر",
+      "meetingSchedule": "جدول الاجتماعات",
+      "meetingSchedulePlaceholder": "مثال: كل سبت الساعة 9:00 صباحاً",
+      "objectives": "أهداف الفريق",
+      "objectivesPlaceholder": "أدخل أهداف وغايات الفريق",
+      "maxCapacity": "السعة القصوى",
+      "basicInfo": "المعلومات الأساسية",
+      "contactInfo": "معلومات الاتصال",
+      "medicalInfo": "المعلومات الطبية",
+      "gender": "الجنس",
+      "genderPlaceholder": "ذكر/أنثى",
+      "nationality": "الجنسية",
+      "nationalityPlaceholder": "أدخل الجنسية",
+      "emergencyContact": "اسم جهة الاتصال للطوارئ",
+      "emergencyContactPlaceholder": "أدخل اسم جهة الاتصال للطوارئ",
+      "emergencyPhone": "هاتف الطوارئ",
+      "emergencyPhonePlaceholder": "أدخل هاتف الطوارئ",
+      "address": "العنوان",
+      "addressPlaceholder": "أدخل العنوان الكامل",
+      "notes": "ملاحظات",
+      "notesPlaceholder": "ملاحظات إضافية",
+      "backToTeam": "العودة للفريق"
     },
     "activities": {
       "title": "الأنشطة والمهام",
@@ -194,11 +340,37 @@
       "addActivity": "إضافة نشاط",
       "date": "التاريخ",
       "team": "الفريق",
+      "location": "الموقع",
+      "noActivities": "لا توجد أنشطة",
+      "createFirst": "أنشئ نشاطك الأول",
+      "backToActivities": "العودة إلى الأنشطة",
+      "newActivity": "نشاط جديد",
+      "basicInfo": "المعلومات الأساسية",
+      "titlePlaceholder": "مثال: تدريب الملاحة في الطبيعة",
+      "description": "الوصف",
+      "descriptionPlaceholder": "صف أهداف النشاط والتفاصيل...",
+      "selectTeam": "اختر فريقاً (اختياري)",
+      "dateTime": "التاريخ والوقت",
+      "startTime": "وقت البداية",
+      "endTime": "وقت النهاية",
+      "details": "التفاصيل",
+      "locationPlaceholder": "مثال: مسار الجبل، مركز التدريب",
+      "maxParticipants": "الحد الأقصى للمشاركين",
+      "maxParticipantsPlaceholder": "اختياري",
+      "requiredEquipment": "المعدات المطلوبة",
+      "equipmentPlaceholder": "أضف عنصر معدات",
+      "notes": "ملاحظات",
+      "notesPlaceholder": "ملاحظات أو تعليمات إضافية...",
+      "creating": "جاري الإنشاء...",
+      "createActivity": "إنشاء النشاط",
       "status": {
+        "label": "الحالة",
         "scheduled": "مجدول",
         "planned": "مخطط",
         "draft": "مسودة",
-        "inProgress": "قيد التنفيذ"
+        "in_progress": "قيد التنفيذ",
+        "completed": "مكتمل",
+        "cancelled": "ملغى"
       }
     },
     "reports": {
@@ -210,19 +382,82 @@
         "draft": "مسودة"
       }
     },
+    "medical": {
+      "title": "السجلات الطبية",
+      "searchPlaceholder": "البحث في السجلات الطبية...",
+      "addRecord": "إضافة سجل",
+      "emptyTitle": "لا توجد سجلات طبية",
+      "emptyDescription": "ستظهر السجلات الطبية للكشافة هنا. أضف سجلاً جديداً للبدء.",
+      "noRecords": "لا توجد سجلات طبية",
+      "allergies": "الحساسية",
+      "conditions": "الحالات الطبية",
+      "lastCheckup": "آخر فحص"
+    },
+    "permissionSlips": {
+      "title": "تصاريح الأنشطة",
+      "searchPlaceholder": "البحث في التصاريح...",
+      "createSlip": "إنشاء تصريح",
+      "emptyTitle": "لا توجد تصاريح",
+      "emptyDescription": "ستظهر تصاريح الأنشطة والفعاليات هنا. أنشئ تصريحاً جديداً للبدء.",
+      "noSlips": "لم يتم العثور على تصاريح",
+      "status": {
+        "pending": "قيد الانتظار",
+        "approved": "موافق عليه",
+        "denied": "مرفوض"
+      },
+      "approve": "موافقة",
+      "deny": "رفض"
+    },
     "settings": {
       "title": "الإعدادات",
       "profile": {
         "title": "الملف الشخصي",
-        "subtitle": "تحديث المعلومات الأساسية.",
-        "save": "حفظ التغييرات"
+        "subtitle": "تحديث معلوماتك الشخصية والصورة الرمزية.",
+        "name": "الاسم الكامل",
+        "email": "البريد الإلكتروني",
+        "phone": "رقم الهاتف",
+        "changeAvatar": "تغيير الصورة الرمزية",
+        "avatarHint": "JPG أو PNG أو GIF. الحد الأقصى 2 ميجابايت.",
+        "save": "حفظ التغييرات",
+        "emailHint": "لا يمكن تغيير البريد الإلكتروني"
       },
       "notifications": {
         "title": "الإشعارات",
-        "subtitle": "التحكم في تنبيهات البريد الإلكتروني.",
+        "subtitle": "إدارة كيفية تلقي الإشعارات.",
+        "emailNotifications": "إشعارات البريد الإلكتروني",
+        "emailNotificationsHint": "تلقي الإشعارات عبر البريد الإلكتروني",
         "weeklySummaries": "ملخصات أسبوعية",
+        "weeklySummariesHint": "احصل على ملخص أسبوعي للأنشطة",
         "activityAlerts": "تنبيهات الأنشطة",
+        "activityAlertsHint": "احصل على إشعارات حول الأنشطة الجديدة",
+        "eventReminders": "تذكيرات الأحداث",
+        "eventRemindersHint": "تلقي تذكيرات قبل الأحداث",
         "save": "حفظ التفضيلات"
+      },
+      "appearance": {
+        "title": "المظهر",
+        "subtitle": "تخصيص شكل ومظهر التطبيق.",
+        "language": "اللغة",
+        "theme": "السمة",
+        "light": "فاتح",
+        "dark": "داكن",
+        "system": "النظام",
+        "compactMode": "الوضع المضغوط",
+        "compactModeHint": "تقليل المسافات والحشو",
+        "save": "حفظ المظهر"
+      },
+      "security": {
+        "title": "الأمان",
+        "subtitle": "إدارة إعدادات أمان حسابك.",
+        "changePassword": "تغيير كلمة المرور",
+        "lastChanged": "آخر تغيير",
+        "change": "تغيير",
+        "twoFactor": "المصادقة الثنائية",
+        "twoFactorHint": "أضف طبقة إضافية من الأمان لحسابك",
+        "activeSessions": "الجلسات النشطة",
+        "devicesActive": "أجهزة نشطة حالياً",
+        "logoutAll": "تسجيل الخروج من الكل",
+        "save": "حفظ الأمان"
       }
     }
   }

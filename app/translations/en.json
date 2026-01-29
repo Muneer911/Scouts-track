@@ -92,6 +92,7 @@
     "brand": "Scouts Platform",
     "features": "Features",
     "howItWorks": "How It Works",
+    "pricing": "Pricing",
     "contact": "Contact"
   },
   "common": {
@@ -162,22 +163,114 @@
       "teams": "Teams",
       "activities": "Activities",
       "reports": "Reports",
-      "settings": "Settings"
+      "medical": "Medical",
+      "permissionSlips": "Permission Slips",
+      "settings": "Settings",
+      "help": "Help & information",
+      "logout": "Log out"
     },
     "topbar": {
       "logout": "Logout",
       "admin": "Admin"
     },
+    "greeting": "Hello",
+    "trackProgress": "Track team progress here. You almost reach a goal!",
+    "welcome": {
+      "title": "Welcome",
+      "subtitle": "You're all set up. Let's create your first workspace and start collaborating with your team.",
+      "createWorkspace": "Create Your First Workspace",
+      "createWorkspaceDesc": "Workspaces help you organize projects, tasks, and team members",
+      "createButton": "Create Workspace",
+      "inviteTeam": "Invite Team Members",
+      "inviteTeamDesc": "Collaborate better by inviting your colleagues to join",
+      "configureSettings": "Configure Settings",
+      "configureSettingsDesc": "Customize your workspace preferences and integrations",
+      "comingSoon": "Coming Soon",
+      "gettingStarted": "Getting Started Guide",
+      "gettingStartedDesc": "Follow these steps to set up your workspace",
+      "step1Title": "Create a workspace",
+      "step1Desc": "Start by creating your first workspace to organize your work",
+      "step2Title": "Add your first team",
+      "step2Desc": "Create teams to group scouts and activities",
+      "step3Title": "Invite your team",
+      "step3Desc": "Collaborate by inviting team members to your workspace"
+    },
+    "workspace": {
+      "createTitle": "Create Your Workspace",
+      "createDesc": "Give your workspace a name. You can always change it later.",
+      "nameLabel": "Workspace Name",
+      "namePlaceholder": "Enter workspace name",
+      "randomize": "Generate random name",
+      "randomizeHint": "Click the refresh button to generate a random name",
+      "creating": "Creating...",
+      "create": "Create Workspace"
+    },
+    "onboarding": {
+      "step": "Step",
+      "of": "of",
+      "complete": "complete",
+      "back": "Back",
+      "continue": "Continue",
+      "getStarted": "Get Started",
+      "name": {
+        "title": "What's your name?",
+        "subtitle": "Let's get to know you better",
+        "placeholder": "Enter your full name"
+      },
+      "role": {
+        "title": "What's your role?",
+        "subtitle": "Tell us about what you do",
+        "options": {
+          "manager": "Team Manager",
+          "leader": "Team Leader",
+          "member": "Team Member",
+          "executive": "Executive",
+          "other": "Other"
+        }
+      },
+      "organization": {
+        "title": "What's your organization called?",
+        "subtitle": "Help us personalize your experience",
+        "placeholder": "Enter organization name"
+      },
+      "orgType": {
+        "title": "What type of organization is it?",
+        "subtitle": "This helps us tailor features for you",
+        "options": {
+          "scouts": "Scout Organization",
+          "school": "School",
+          "community": "Community Group",
+          "nonprofit": "Non-Profit",
+          "other": "Other"
+        }
+      },
+      "teamSize": {
+        "title": "How big is your team?",
+        "subtitle": "We'll optimize the workspace for your team size",
+        "options": {
+          "small": "1-20 people",
+          "medium": "21-50 people",
+          "large": "51-100 people",
+          "xlarge": "101-500 people",
+          "enterprise": "500+ people"
+        }
+      }
+    },
     "overview": {
-      "activeTeams": "Active teams",
+      "totalScouts": "Total Scouts",
+      "activeTeams": "Active Teams",
       "scoutsEnrolled": "Scouts enrolled",
       "scheduledActivities": "Scheduled activities",
       "completionRate": "Completion rate",
-      "recentActivity": "Recent activity",
+      "recentActivity": "Recent Activity",
       "atAGlance": "At a glance",
-      "upcomingEvents": "Upcoming events",
+      "upcomingEvents": "Upcoming Events",
       "reportsAwaiting": "Reports awaiting review",
-      "unreadMessages": "Messages unread"
+      "attendanceRate": "Attendance Rate",
+      "attendanceTrend": "Attendance Trend",
+      "unreadMessages": "Unread Messages",
+      "badgeProgress": "Badge Progress",
+      "systemMessages": "System Messages"
     },
     "teams": {
       "title": "Teams",
@@ -186,7 +279,60 @@
       "team": "Team",
       "members": "Members",
       "lead": "Lead",
-      "region": "Region"
+      "region": "Region",
+      "noTeams": "No teams found",
+      "createFirst": "Create your first team",
+      "noSupervisor": "No supervisor",
+      "noRegion": "No region",
+      "notFound": "Team not found",
+      "backToTeams": "Back to Teams",
+      "addMember": "Add Member",
+      "noMembers": "No members in this team",
+      "newTeam": "New Team",
+      "newTeamDescription": "Create a new team and start adding members",
+      "teamName": "Team Name",
+      "teamNamePlaceholder": "Enter team name",
+      "regionPlaceholder": "Enter region",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter team description",
+      "saveTeam": "Save Team",
+      "createError": "Failed to create team",
+      "addMemberTitle": "Add New Member",
+      "addMemberDescription": "Add a new scout to this team",
+      "memberName": "Full Name",
+      "memberNamePlaceholder": "Enter member's full name",
+      "dateOfBirth": "Date of Birth",
+      "parentName": "Parent/Guardian Name",
+      "parentNamePlaceholder": "Enter parent's name",
+      "parentPhone": "Parent Phone",
+      "parentPhonePlaceholder": "Enter phone number",
+      "parentEmail": "Parent Email",
+      "parentEmailPlaceholder": "Enter email address",
+      "saveMember": "Save Member",
+      "memberCreateError": "Failed to add member",
+      "ageRangeMin": "Minimum Age",
+      "ageRangeMax": "Maximum Age",
+      "meetingSchedule": "Meeting Schedule",
+      "meetingSchedulePlaceholder": "e.g., Every Saturday 9:00 AM",
+      "objectives": "Team Objectives",
+      "objectivesPlaceholder": "Enter team goals and objectives",
+      "maxCapacity": "Maximum Capacity",
+      "basicInfo": "Basic Information",
+      "contactInfo": "Contact Information",
+      "medicalInfo": "Medical Information",
+      "gender": "Gender",
+      "genderPlaceholder": "Male/Female",
+      "nationality": "Nationality",
+      "nationalityPlaceholder": "Enter nationality",
+      "emergencyContact": "Emergency Contact Name",
+      "emergencyContactPlaceholder": "Enter emergency contact name",
+      "emergencyPhone": "Emergency Phone",
+      "emergencyPhonePlaceholder": "Enter emergency phone",
+      "address": "Address",
+      "addressPlaceholder": "Enter full address",
+      "notes": "Notes",
+      "notesPlaceholder": "Additional notes",
+      "backToTeam": "Back to Team"
     },
     "activities": {
       "title": "Activities & Missions",
@@ -194,11 +340,37 @@
       "addActivity": "Add activity",
       "date": "Date",
       "team": "Team",
+      "location": "Location",
+      "noActivities": "No activities found",
+      "createFirst": "Create your first activity",
+      "backToActivities": "Back to Activities",
+      "newActivity": "New Activity",
+      "basicInfo": "Basic Information",
+      "titlePlaceholder": "e.g., Trail Navigation Training",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe the activity objectives and details...",
+      "selectTeam": "Select a team (optional)",
+      "dateTime": "Date & Time",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "details": "Details",
+      "locationPlaceholder": "e.g., Mountain Trail, Training Center",
+      "maxParticipants": "Max Participants",
+      "maxParticipantsPlaceholder": "Optional",
+      "requiredEquipment": "Required Equipment",
+      "equipmentPlaceholder": "Add equipment item",
+      "notes": "Notes",
+      "notesPlaceholder": "Additional notes or instructions...",
+      "creating": "Creating...",
+      "createActivity": "Create Activity",
       "status": {
+        "label": "Status",
         "scheduled": "Scheduled",
         "planned": "Planned",
         "draft": "Draft",
-        "inProgress": "In progress"
+        "in_progress": "In Progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
       }
     },
     "reports": {
@@ -210,19 +382,96 @@
         "draft": "Draft"
       }
     },
+    "medical": {
+      "title": "Medical Records",
+      "searchPlaceholder": "Search medical records...",
+      "addRecord": "Add Record",
+      "emptyTitle": "No Medical Records",
+      "emptyDescription": "Medical records for scouts will appear here. Add a new record to get started.",
+      "noRecords": "No medical records found",
+      "allergies": "Allergies",
+      "allergiesPlaceholder": "List any allergies",
+      "conditions": "Medical Conditions",
+      "lastCheckup": "Last Checkup",
+      "bloodType": "Blood Type",
+      "medications": "Current Medications",
+      "medicationsPlaceholder": "List current medications",
+      "medicalConditions": "Medical Conditions",
+      "medicalConditionsPlaceholder": "List any medical conditions",
+      "insuranceProvider": "Insurance Provider",
+      "insuranceProviderPlaceholder": "Enter insurance company name",
+      "insuranceNumber": "Insurance Number",
+      "insuranceNumberPlaceholder": "Enter insurance policy number",
+      "doctorName": "Doctor Name",
+      "doctorNamePlaceholder": "Enter primary doctor's name",
+      "doctorPhone": "Doctor Phone",
+      "doctorPhonePlaceholder": "Enter doctor's phone number"
+    },
+    "permissionSlips": {
+      "title": "Permission Slips",
+      "searchPlaceholder": "Search permission slips...",
+      "createSlip": "Create Slip",
+      "emptyTitle": "No Permission Slips",
+      "emptyDescription": "Permission slips for activities and events will appear here. Create a new slip to get started.",
+      "noSlips": "No permission slips found",
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "denied": "Denied"
+      },
+      "approve": "Approve",
+      "deny": "Deny"
+    },
     "settings": {
       "title": "Settings",
       "profile": {
         "title": "Profile",
-        "subtitle": "Update basic information.",
-        "save": "Save changes"
+        "subtitle": "Update your personal information and avatar.",
+        "name": "Full Name",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "changeAvatar": "Change Avatar",
+        "avatarHint": "JPG, PNG or GIF. Max 2MB.",
+        "save": "Save Changes",
+        "emailHint": "Email cannot be changed"
       },
       "notifications": {
         "title": "Notifications",
-        "subtitle": "Control email alerts.",
-        "weeklySummaries": "Weekly summaries",
-        "activityAlerts": "Activity alerts",
-        "save": "Save preferences"
+        "subtitle": "Manage how you receive notifications.",
+        "emailNotifications": "Email Notifications",
+        "emailNotificationsHint": "Receive notifications via email",
+        "weeklySummaries": "Weekly Summaries",
+        "weeklySummariesHint": "Get a weekly digest of activities",
+        "activityAlerts": "Activity Alerts",
+        "activityAlertsHint": "Get notified about new activities",
+        "eventReminders": "Event Reminders",
+        "eventRemindersHint": "Receive reminders before events",
+        "save": "Save Preferences"
+      },
+      "appearance": {
+        "title": "Appearance",
+        "subtitle": "Customize the look and feel of the application.",
+        "language": "Language",
+        "theme": "Theme",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System",
+        "compactMode": "Compact Mode",
+        "compactModeHint": "Reduce spacing and padding",
+        "save": "Save Appearance"
+      },
+      "security": {
+        "title": "Security",
+        "subtitle": "Manage your account security settings.",
+        "changePassword": "Change Password",
+        "lastChanged": "Last changed",
+        "change": "Change",
+        "twoFactor": "Two-Factor Authentication",
+        "twoFactorHint": "Add an extra layer of security to your account",
+        "activeSessions": "Active Sessions",
+        "devicesActive": "devices currently active",
+        "logoutAll": "Logout All",
+        "save": "Save Security"
       }
     }
   }

@@ -5,7 +5,7 @@ import enTranslations from '../translations/en.json';
 import arTranslations from '../translations/ar.json';
 
 type TranslationKey = string;
-type Translations = typeof enTranslations;
+type Translations = typeof enTranslations | typeof arTranslations;
 
 const translations: Record<'en' | 'ar', Translations> = {
   en: enTranslations,
