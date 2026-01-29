@@ -3,9 +3,13 @@
 import { useTransition, useState } from 'react';
 import Link from 'next/link';
 import { registerAction } from '@/app/actions/register';
-import { Button } from '@/app/components/ui/Button';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LanguageToggle } from '@/app/components/ui/LanguageToggle';
 import { useTranslation } from '@/app/hooks/useTranslation';
+import { ArrowLeft, Sparkles, Mail, Lock, User } from 'lucide-react';
 
 export default function RegisterPage() {
   const { t } = useTranslation();
@@ -25,16 +29,13 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-scout-neutral via-white to-scout-neutral/50 flex items-center justify-center px-4 relative">
-      {/* Decorative accent */}
-      <div className="absolute top-0 start-0 w-64 h-64 bg-scout-green/5 rounded-full blur-3xl -z-10" />
-      <div className="absolute bottom-0 end-0 w-96 h-96 bg-scout-gold/5 rounded-full blur-3xl -z-10" />
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 relative">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/10 -z-10" />
       
       <div className="absolute top-6 start-6">
-        <Link href="/" className="inline-flex items-center gap-2 text-sm text-scout-gray hover:text-scout-green transition-colors group">
-          <svg className="w-4 h-4 rtl:rotate-180 transition-transform group-hover:-translate-x-1 rtl:group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
+        <Link href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors group">
+          <ArrowLeft className="w-4 h-4 rtl:rotate-180 transition-transform group-hover:-translate-x-1 rtl:group-hover:translate-x-1" />
           <span>{t('auth.backToHome')}</span>
         </Link>
       </div>
@@ -43,78 +44,83 @@ export default function RegisterPage() {
         <LanguageToggle />
       </div>
 
-      <div className="w-full max-w-md bg-white/95 backdrop-blur-sm shadow-xl rounded-2xl p-8 border border-scout-gray-lighter/50 relative overflow-hidden">
-        {/* Subtle accent border */}
-        <div className="absolute top-0 start-0 end-0 h-1 bg-gradient-to-e from-scout-green via-scout-green-lighter to-scout-gold/30" />
-        <div className="mb-8">
-          <h1 className="text-2xl font-light text-scout-green">{t('auth.register.title')}</h1>
-          <p className="text-scout-gray mt-2">{t('auth.register.subtitle')}</p>
-        </div>
-
-        {error && (
-          <div className="mb-4 rounded-lg bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-700">
-            {error}
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center pb-2">
+          <div className="w-12 h-12 rounded-xl bg-primary mx-auto mb-4 flex items-center justify-center">
+            <Sparkles className="w-6 h-6 text-primary-foreground" />
           </div>
-        )}
+          <CardTitle className="text-2xl">{t('auth.register.title')}</CardTitle>
+          <CardDescription>{t('auth.register.subtitle')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <div className="mb-4 rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive">
+              {error}
+            </div>
+          )}
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div className="space-y-2">
-            <label className="block text-sm text-scout-gray text-start mb-2" htmlFor="name">
-              {t('auth.register.name')}
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              minLength={2}
-              dir="auto"
-              className="w-full rounded-lg border border-scout-gray-lighter bg-white ps-4 pe-4 py-3 text-scout-green focus:outline-none focus:ring-2 focus:ring-scout-green/30 focus:border-scout-green-lighter transition text-start hover:border-scout-green/30"
-              placeholder="Aisha Al Saud"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="block text-sm text-scout-gray text-start mb-2" htmlFor="email">
-              {t('auth.register.email')}
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              dir="auto"
-              className="w-full rounded-lg border border-scout-gray-lighter bg-white ps-4 pe-4 py-3 text-scout-green focus:outline-none focus:ring-2 focus:ring-scout-green/30 focus:border-scout-green-lighter transition text-start hover:border-scout-green/30"
-              placeholder="you@example.com"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="block text-sm text-scout-gray text-start mb-2" htmlFor="password">
-              {t('auth.register.password')}
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              minLength={6}
-              dir="auto"
-              className="w-full rounded-lg border border-scout-gray-lighter bg-white ps-4 pe-4 py-3 text-scout-green focus:outline-none focus:ring-2 focus:ring-scout-green/30 focus:border-scout-green-lighter transition text-start hover:border-scout-green/30"
-              placeholder="••••••••"
-            />
-          </div>
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div className="space-y-2">
+              <Label htmlFor="name">{t('auth.register.name')}</Label>
+              <div className="relative">
+                <User className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  minLength={2}
+                  dir="auto"
+                  className="ps-10"
+                  placeholder="Aisha Al Saud"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">{t('auth.register.email')}</Label>
+              <div className="relative">
+                <Mail className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  dir="auto"
+                  className="ps-10"
+                  placeholder="you@example.com"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">{t('auth.register.password')}</Label>
+              <div className="relative">
+                <Lock className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  minLength={6}
+                  dir="auto"
+                  className="ps-10"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
 
-          <Button type="submit" className="w-full py-3 bg-gradient-to-r from-scout-green to-scout-green-light hover:from-scout-green-light hover:to-scout-green-accent shadow-md hover:shadow-lg transition-all" disabled={pending}>
-            {pending ? t('auth.register.submitting') : t('auth.register.submit')}
-          </Button>
-        </form>
+            <Button type="submit" className="w-full" size="lg" disabled={pending}>
+              {pending ? t('auth.register.submitting') : t('auth.register.submit')}
+            </Button>
+          </form>
 
-        <div className="mt-6 text-sm text-scout-gray flex items-center justify-between">
-          <span>{t('auth.register.hasAccount')}</span>
-          <Link href="/login" className="text-scout-green hover:underline">
-            {t('auth.register.signIn')}
-          </Link>
-        </div>
-      </div>
+          <div className="mt-6 text-sm text-muted-foreground text-center">
+            <span>{t('auth.register.hasAccount')} </span>
+            <Link href="/login" className="text-primary hover:underline font-medium">
+              {t('auth.register.signIn')}
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

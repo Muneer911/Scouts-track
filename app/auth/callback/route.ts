@@ -8,7 +8,24 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const supabase = await createClient()
-    await supabase.auth.exchangeCodeForSession(code)
+    const { data } = await supabase.auth.exchangeCodeForSession(code)
+    
+    // Check user's onboarding status
+    if (data?.user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('onboarding_completed, onboarded')
+        .eq('id', data.user.id)
+        .single()
+      
+      // New user flow: onboarding questions -> welcome -> dashboard
+      if (!profile?.onboarding_completed) {
+        return NextResponse.redirect(`${requestUrl.origin}/onboarding`)
+      }
+      if (!profile?.onboarded) {
+        return NextResponse.redirect(`${requestUrl.origin}/welcome`)
+      }
+    }
   }
 
   return NextResponse.redirect(`${requestUrl.origin}/dashboard`)

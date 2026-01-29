@@ -16,7 +16,7 @@ export async function loginAction(formData: FormData) {
     return { error: 'auth.login.errors.shortPassword' };
   }
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -25,6 +25,22 @@ export async function loginAction(formData: FormData) {
     return { error: 'auth.login.errors.invalidCredentials' };
   }
 
+  // Check user's onboarding status
+  if (data?.user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('onboarding_completed, onboarded')
+      .eq('id', data.user.id)
+      .single()
+    
+    // Redirect based on onboarding progress
+    if (!profile?.onboarding_completed) {
+      redirect('/onboarding');
+    }
+    if (!profile?.onboarded) {
+      redirect('/welcome');
+    }
+  }
+
   redirect('/dashboard');
 }
-
