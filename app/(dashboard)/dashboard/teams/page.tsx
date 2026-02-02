@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { PageShell } from '@/app/components/dashboard/PageShell';
 import { useTranslation } from '@/app/hooks/useTranslation';
-import { createClient } from '@/lib/supabase/client';
+import { getTeamsWithMemberCounts } from '@/app/actions/teams';
 import { Users, Plus, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { LoadingSpinner } from '@/app/components/ui/loading-spinner';
 
 interface Team {
   id: string;
@@ -27,19 +28,10 @@ export default function TeamsPage() {
 
   useEffect(() => {
     async function fetchTeams() {
-      const supabase = createClient();
-      
-      // Fetch teams
-      const { data: teamsData, error : teamsError } = await supabase
-        .from('team')
-        .select(`
-          id,
-          name,
-          region,
-          description
-        `);
-        if (teamsError && !teamsData) {
-        console.error('Error fetching teams:', teamsError);
+      const { teams: teamsData, error } = await getTeamsWithMemberCounts();
+
+      if (error && !teamsData) {
+        console.error('Error fetching teams:', error);
         // Use demo data if fetch fails so UI can still render
         setTeams([
           { id: '1', name: 'Falcons', region: 'Riyadh', description: null, supervisor: null, member_count: 24 },
@@ -50,32 +42,12 @@ export default function TeamsPage() {
         return;
       }
 
-
       if (teamsData) {
-        // Fetch member counts for each team
-        const teamsWithCounts = await Promise.all(
-          teamsData.map(async (team) => {
-            const { count } = await supabase
-              .from('team_members')
-              .select('*', { count: 'exact', head: true })
-              .eq('team_id', team.id);
-            
-            return {
-              id: team.id,
-              name: team.name,
-              region: team.region,
-              description: team.description,
-              supervisor: null,
-              member_count: count || 0,
-            } as Team;
-          })
-        );
-        setTeams(teamsWithCounts);
+        setTeams(teamsData);
       }
-      
+
       setLoading(false);
     }
-    
 
     fetchTeams();
   }, []);
@@ -87,9 +59,7 @@ export default function TeamsPage() {
   if (loading) {
     return (
       <PageShell title={t('dashboard.teams.title')}>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-muted-foreground">Loading...</div>
-        </div>
+        <LoadingSpinner />
       </PageShell>
     );
   }

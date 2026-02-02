@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { PageShell } from '@/app/components/dashboard/PageShell';
 import { useTranslation } from '@/app/hooks/useTranslation';
-import { createClient } from '@/lib/supabase/client';
-import { 
-  Users, 
-  ArrowLeft, 
-  Plus, 
-  Stethoscope, 
+import { getTeamFullData, updatePermissionSlipStatus } from '@/app/actions/teams';
+import { getReportDownloadUrl } from '@/app/actions/reports';
+import {
+  Users,
+  ArrowLeft,
+  Plus,
+  Stethoscope,
   ClipboardList,
   User,
   Phone,
@@ -17,11 +18,13 @@ import {
   Calendar,
   AlertCircle,
   CheckCircle,
-  Clock
+  Clock,
+  FileText,
+  Download
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { updatePermissionSlipStatus } from '@/app/actions/teams';
+import { LoadingSpinner } from '@/app/components/ui/loading-spinner';
 
 interface TeamMember {
   id: string;
@@ -40,6 +43,14 @@ interface MedicalRecord {
   allergies: string | null;
   medical_conditions: string | null;
   last_checkup: string | null;
+}
+
+interface ArchivedReport {
+  id: string;
+  file_name: string;
+  file_path: string;
+  created_at: string;
+  summary: string;
 }
 
 interface PermissionSlip {
@@ -69,6 +80,7 @@ export default function TeamDetailPage() {
   const [members, setMembers] = useState<TeamMember[]>([]);
   const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[]>([]);
   const [permissionSlips, setPermissionSlips] = useState<PermissionSlip[]>([]);
+  const [archivedReports, setArchivedReports] = useState<ArchivedReport[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('members');
   const [updatingSlipId, setUpdatingSlipId] = useState<string | null>(null);
@@ -76,11 +88,11 @@ export default function TeamDetailPage() {
   const handleStatusUpdate = async (slipId: string, newStatus: 'pending' | 'approved' | 'denied') => {
     setUpdatingSlipId(slipId);
     const result = await updatePermissionSlipStatus(slipId, newStatus);
-    
+
     if (result.success) {
       // Update local state
-      setPermissionSlips(slips => 
-        slips.map(slip => 
+      setPermissionSlips(slips =>
+        slips.map(slip =>
           slip.id === slipId ? { ...slip, status: newStatus } : slip
         )
       );
@@ -90,23 +102,11 @@ export default function TeamDetailPage() {
 
   useEffect(() => {
     async function fetchTeamData() {
-      const supabase = createClient();
+      const result = await getTeamFullData(teamId);
 
-      // Fetch team details
-      const { data: teamData, error: teamError } = await supabase
-        .from('team')
-        .select(`
-          id,
-          name,
-          region,
-          description
-        `)
-        .eq('id', teamId)
-        .single();
-
-      if (teamError && !teamData) {
-        console.error('Error fetching team:', teamError);
-        // Demo data
+      if (result.error && !result.team) {
+        console.error('Error fetching team:', result.error);
+        // Demo data fallback
         setTeam({ id: teamId, name: 'Falcons', region: 'Riyadh', description: 'Scout team' });
         setMembers([
           { id: '1', full_name: 'Ahmed Ali', date_of_birth: '2012-05-15', parent_name: 'Ali Mohammed', parent_phone: '+966501234567', parent_email: 'ali@example.com' },
@@ -126,55 +126,12 @@ export default function TeamDetailPage() {
         return;
       }
 
-      if (teamData) {
-
-        setTeam({
-          id: teamData.id,
-          name: teamData.name,
-          region: teamData.region,
-          description: teamData.description
-        });
-
-        // Fetch team members
-        const { data: membersData } = await supabase
-          .from('team_members')
-          .select('*')
-          .eq('team_id', teamId);
-        
-        if (membersData) {
-          setMembers(membersData);
-
-          // Fetch medical records for all members
-          const memberIds = membersData.map(m => m.id);
-          if (memberIds.length > 0) {
-            const { data: medicalData } = await supabase
-              .from('medical_records')
-              .select('*')
-              .in('member_id', memberIds);
-            
-            if (medicalData) {
-              const recordsWithNames = medicalData.map(record => ({
-                ...record,
-                member_name: membersData.find(m => m.id === record.member_id)?.full_name || 'Unknown',
-              }));
-              setMedicalRecords(recordsWithNames);
-            }
-
-            // Fetch permission slips for all members
-            const { data: slipsData } = await supabase
-              .from('permission_slips')
-              .select('*')
-              .in('member_id', memberIds);
-            
-            if (slipsData) {
-              const slipsWithNames = slipsData.map(slip => ({
-                ...slip,
-                member_name: membersData.find(m => m.id === slip.member_id)?.full_name || 'Unknown',
-              }));
-              setPermissionSlips(slipsWithNames);
-            }
-          }
-        }
+      if (result.team) {
+        setTeam(result.team);
+        setMembers(result.members);
+        setMedicalRecords(result.medicalRecords);
+        setPermissionSlips(result.permissionSlips);
+        setArchivedReports(result.archivedReports);
       }
 
       setLoading(false);
@@ -208,9 +165,7 @@ export default function TeamDetailPage() {
   if (loading) {
     return (
       <PageShell title={t('dashboard.teams.title')}>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-muted-foreground">Loading...</div>
-        </div>
+        <LoadingSpinner />
       </PageShell>
     );
   }
@@ -240,7 +195,7 @@ export default function TeamDetailPage() {
           <ArrowLeft className="w-4 h-4" />
           {t('dashboard.teams.backToTeams')}
         </Button>
-        
+
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-scout-green">{team.name}</h2>
@@ -248,10 +203,20 @@ export default function TeamDetailPage() {
               {team.region || t('dashboard.teams.noRegion')}
             </p>
           </div>
-          <Button className="gap-2" onClick={() => router.push(`/dashboard/teams/${teamId}/members/new`)}>
-            <Plus className="w-4 h-4" />
-            {t('dashboard.teams.addMember')}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              className="gap-2 border-amber-500/50 text-amber-700 hover:bg-amber-50"
+              onClick={() => router.push(`/dashboard/teams/${teamId}/report`)}
+            >
+              <Stethoscope className="w-4 h-4" />
+              {t('dashboard.teams.generateHealthReport')}
+            </Button>
+            <Button className="gap-2" onClick={() => router.push(`/dashboard/teams/${teamId}/members/new`)}>
+              <Plus className="w-4 h-4" />
+              {t('dashboard.teams.addMember')}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -285,14 +250,15 @@ export default function TeamDetailPage() {
                 {members.map((member) => (
                   <div
                     key={member.id}
-                    className="flex items-center justify-between p-4 rounded-xl border border-scout-gray-lighter hover:border-scout-green/30 transition-all"
+                    onClick={() => router.push(`/dashboard/teams/${teamId}/scouts/${member.id}`)}
+                    className="flex items-center justify-between p-4 rounded-xl border border-scout-gray-lighter hover:border-scout-green/30 hover:bg-scout-green/5 transition-all cursor-pointer group"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-scout-green/10 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-scout-green/10 flex items-center justify-center group-hover:bg-scout-green/20 transition-colors">
                         <User className="w-6 h-6 text-scout-green" />
                       </div>
                       <div>
-                        <h4 className="font-medium text-scout-green">{member.full_name}</h4>
+                        <h4 className="font-medium text-scout-green group-hover:text-scout-dark transition-colors">{member.full_name}</h4>
                         {member.date_of_birth && (
                           <p className="text-sm text-scout-gray flex items-center gap-1">
                             <Calendar className="w-3 h-3" />
@@ -324,47 +290,96 @@ export default function TeamDetailPage() {
 
         {/* Medical Tab */}
         <TabsContent value="medical">
-          <div className="rounded-2xl border border-scout-gray-lighter bg-white p-6 shadow-sm">
-            {medicalRecords.length === 0 ? (
-              <div className="text-center py-12">
-                <Stethoscope className="w-12 h-12 text-scout-gray-light mx-auto mb-4" />
-                <p className="text-scout-gray">{t('dashboard.medical.noRecords')}</p>
-              </div>
-            ) : (
-              <div className="grid gap-4">
-                {medicalRecords.map((record) => (
-                  <div
-                    key={record.id}
-                    className="p-4 rounded-xl border border-scout-gray-lighter hover:border-scout-green/30 transition-all"
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-medium text-scout-green">{record.member_name}</h4>
-                      {record.blood_type && (
-                        <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
-                          {record.blood_type}
-                        </span>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <p className="text-scout-gray">{t('dashboard.medical.allergies')}</p>
-                        <p className="text-scout-green">{record.allergies || 'None'}</p>
+          <div className="rounded-2xl border border-scout-gray-lighter bg-white p-6 shadow-sm space-y-8">
+            {/* Individual Scout Medical Records */}
+            <div>
+              <h3 className="text-lg font-bold text-scout-green mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5" />
+                {t('dashboard.teams.individualRecords')}
+              </h3>
+              {medicalRecords.length === 0 ? (
+                <div className="text-center py-8 bg-slate-50 rounded-xl border border-dashed">
+                  <p className="text-scout-gray">{t('dashboard.medical.noRecords')}</p>
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {medicalRecords.map((record) => (
+                    <div
+                      key={record.id}
+                      className="p-4 rounded-xl border border-scout-gray-lighter hover:border-scout-green/30 transition-all"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="font-medium text-scout-green">{record.member_name}</h4>
+                        {record.blood_type && (
+                          <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
+                            {record.blood_type}
+                          </span>
+                        )}
                       </div>
-                      <div>
-                        <p className="text-scout-gray">{t('dashboard.medical.conditions')}</p>
-                        <p className="text-scout-green">{record.medical_conditions || 'None'}</p>
-                      </div>
-                      {record.last_checkup && (
+                      <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <p className="text-scout-gray">{t('dashboard.medical.lastCheckup')}</p>
-                          <p className="text-scout-green">{new Date(record.last_checkup).toLocaleDateString()}</p>
+                          <p className="text-scout-gray">{t('dashboard.medical.allergies')}</p>
+                          <p className="text-scout-green">{record.allergies || 'None'}</p>
                         </div>
-                      )}
+                        <div>
+                          <p className="text-scout-gray">{t('dashboard.medical.conditions')}</p>
+                          <p className="text-scout-green">{record.medical_conditions || 'None'}</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Archived Team Health Reports */}
+            <div className="pt-6 border-t border-slate-100">
+              <h3 className="text-lg font-bold text-scout-green mb-4 flex items-center gap-2">
+                <ClipboardList className="w-5 h-5 text-amber-600" />
+                {t('dashboard.teams.archivedReports')}
+              </h3>
+              {archivedReports.length === 0 ? (
+                <div className="text-center py-12 bg-amber-50/30 rounded-3xl border-2 border-dashed border-amber-100">
+                  <Stethoscope className="w-12 h-12 text-amber-200 mx-auto mb-4" />
+                  <p className="text-amber-800/60 font-medium">{t('dashboard.teams.noArchivedReports')}</p>
+                  <p className="text-xs text-amber-800/40">{t('dashboard.teams.archivedReportsHint')}</p>
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {archivedReports.map((report) => (
+                    <div
+                      key={report.id}
+                      className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-amber-50/50 to-transparent border border-amber-100 hover:border-amber-300 transition-all group"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                          <FileText className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-scout-green">{report.file_name}</h4>
+                          <p className="text-xs text-scout-gray flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            {new Date(report.created_at).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-amber-700 hover:bg-amber-100"
+                        onClick={async () => {
+                          const { url } = await getReportDownloadUrl(report.file_path);
+                          if (url) window.open(url, '_blank');
+                        }}
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        {t('dashboard.teams.viewPdf')}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </TabsContent>
 
