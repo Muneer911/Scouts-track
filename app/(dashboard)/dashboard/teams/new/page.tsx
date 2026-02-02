@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PageShell } from '@/app/components/dashboard/PageShell';
 import { useTranslation } from '@/app/hooks/useTranslation';
-import { createClient } from '@/lib/supabase/client';
+import { createTeam } from '@/app/actions/teams';
 import { ArrowLeft, Users, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,43 +31,14 @@ export default function NewTeamPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('[NewTeamPage] Form submission started');
-    console.log('[NewTeamPage] Form data:', formData);
-    
     setLoading(true);
     setError(null);
 
     try {
-      // Step 1: Initialize Supabase client
-      console.log('[NewTeamPage] Initializing Supabase client...');
-      const supabase = createClient();
-      
-      // Step 2: Get authenticated user
-      console.log('[NewTeamPage] Fetching authenticated user...');
-      const { data: { user }, error: userError   } = await supabase.auth.getUser();
-
-      if (userError) {
-        console.error('[NewTeamPage] Auth error:', userError);
-        setError(`Authentication error: ${userError.message}`);
-        setLoading(false);
-        return;
-      }
-
-      if (!user) {
-        console.error('[NewTeamPage] No user found - not authenticated');
-        setError('Not authenticated. Please log in.');
-        setLoading(false);
-        return;
-      }
-
-      console.log('[NewTeamPage] User authenticated:', user.id);
-
-      // Step 3: Prepare team data
       const teamData = {
         name: formData.name,
         region: formData.region || null,
         description: formData.description || null,
-        supervisor_id: user.id,
         age_range_min: formData.age_range_min ? parseInt(formData.age_range_min) : null,
         age_range_max: formData.age_range_max ? parseInt(formData.age_range_max) : null,
         meeting_schedule: formData.meeting_schedule || null,
@@ -75,44 +46,23 @@ export default function NewTeamPage() {
         max_capacity: formData.max_capacity ? parseInt(formData.max_capacity) : null,
       };
 
-      console.log('[NewTeamPage] Prepared team data:', teamData);
+      const { team, error: createError } = await createTeam(teamData);
 
-      // Step 4: Insert new team
-      console.log('[NewTeamPage] Inserting team into database...');
-      const { data, error: insertError } = await supabase
-        .from('team')
-        .insert(teamData)
-        .select()
-        .single();
-
-      if (insertError) {
-        console.error('[NewTeamPage] Database insert error:', insertError);
-        console.error('[NewTeamPage] Error details:', {
-          message: insertError.message,
-          details: insertError.details,
-          hint: insertError.hint,
-          code: insertError.code
-        });
-        setError(`Failed to create team: ${insertError.message}`);
+      if (createError) {
+        setError(`Failed to create team: ${createError}`);
         setLoading(false);
         return;
       }
 
-      if (!data) {
-        console.error('[NewTeamPage] No data returned from insert');
+      if (!team) {
         setError('Team created but no data returned');
         setLoading(false);
         return;
       }
 
-      console.log('[NewTeamPage] Team created successfully:', data);
-      console.log('[NewTeamPage] Redirecting to team page:', data.id);
-
-      // Step 5: Redirect to the new team's page
-      router.push(`/dashboard/teams/${data.id}`);
+      router.push(`/dashboard/teams/${team.id}`);
     } catch (err) {
-      console.error('[NewTeamPage] Unexpected error:', err);
-      console.error('[NewTeamPage] Error stack:', err instanceof Error ? err.stack : 'No stack trace');
+      console.error('Error:', err);
       setError(`Unexpected error: ${err instanceof Error ? err.message : 'Unknown error'}`);
       setLoading(false);
     }

@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { revalidatePath } from 'next/cache';
 
 export async function getActivities() {
   const supabase = await createClient();
@@ -141,11 +142,11 @@ export async function getActivityParticipants(activityId: string) {
   const supabase = await createClient();
 
   const { data: participants, error } = await supabase
-    .from('activity_participants')
+    .from('attendance')
     .select(`
       id,
-      attendance_status,
-      registered_at,
+      status,
+      created_at,
       member:team_members(id, full_name, date_of_birth)
     `)
     .eq('activity_id', activityId);
@@ -162,11 +163,11 @@ export async function registerParticipant(activityId: string, memberId: string) 
   const supabase = await createClient();
 
   const { data: participant, error } = await supabase
-    .from('activity_participants')
+    .from('attendance')
     .insert({
       activity_id: activityId,
       member_id: memberId,
-      attendance_status: 'registered',
+      status: 'absent', // Default status when registered
     })
     .select()
     .single();
@@ -181,13 +182,13 @@ export async function registerParticipant(activityId: string, memberId: string) 
 
 export async function updateParticipantAttendance(
   participantId: string,
-  attendanceStatus: 'registered' | 'attended' | 'absent' | 'excused'
+  status: 'present' | 'absent' | 'late' | 'excused' | 'registered' | 'attended'
 ) {
   const supabase = await createClient();
 
   const { data: participant, error } = await supabase
-    .from('activity_participants')
-    .update({ attendance_status: attendanceStatus })
+    .from('attendance')
+    .update({ status: status })
     .eq('id', participantId)
     .select()
     .single();
@@ -197,5 +198,57 @@ export async function updateParticipantAttendance(
     return { participant: null, error: error.message };
   }
 
+  revalidatePath(`/dashboard/activities/${participant.activity_id}/attendance`);
   return { participant, error: null };
+}
+
+export async function saveAttendance(activityId: string, records: { memberId: string; status: string }[]) {
+  const supabase = await createClient();
+
+  // Since we don't know if (activity_id, member_id) is unique constrained in DB,
+  // we'll handle upsert manually or assume constraint properties.
+  // For safety, let's try UPSERT on conflict if we assume schema is good, 
+  // OR loop through. Looping is slow but safe if small numbers.
+  // Better: Fetch existing for this activity.
+
+  const { data: existing } = await supabase
+    .from('attendance')
+    .select('id, member_id')
+    .eq('activity_id', activityId);
+
+  const existingMap = new Map(existing?.map(e => [e.member_id, e.id]));
+
+  const updates = [];
+  const inserts = [];
+
+  for (const r of records) {
+    if (existingMap.has(r.memberId)) {
+      updates.push({
+        id: existingMap.get(r.memberId),
+        status: r.status,
+        updated_at: new Date().toISOString()
+      });
+    } else {
+      inserts.push({
+        activity_id: activityId,
+        member_id: r.memberId,
+        status: r.status,
+        date: new Date().toISOString().slice(0, 10)
+      });
+    }
+  }
+
+  if (inserts.length > 0) {
+    const { error: insertError } = await supabase.from('attendance').insert(inserts);
+    if (insertError) return { error: insertError.message };
+  }
+
+  if (updates.length > 0) {
+    for (const u of updates) {
+      await supabase.from('attendance').update({ status: u.status }).eq('id', u.id);
+    }
+  }
+
+  revalidatePath(`/dashboard/activities/${activityId}/attendance`);
+  return { success: true };
 }

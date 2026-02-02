@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { PageShell } from '@/app/components/dashboard/PageShell';
 import { useTranslation } from '@/app/hooks/useTranslation';
-import { createClient } from '@/lib/supabase/client';
+import { createMember } from '@/app/actions/members';
 import { ArrowLeft, UserPlus, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,7 +27,7 @@ export default function NewMemberPage() {
     date_of_birth: '',
     gender: '',
     nationality: '',
-    
+
     // Contact Info
     parent_name: '',
     parent_phone: '',
@@ -35,7 +35,7 @@ export default function NewMemberPage() {
     emergency_contact: '',
     emergency_phone: '',
     address: '',
-    
+
     // Medical Info
     blood_type: '',
     allergies: '',
@@ -45,7 +45,7 @@ export default function NewMemberPage() {
     insurance_number: '',
     doctor_name: '',
     doctor_phone: '',
-    
+
     // Additional Info
     notes: '',
   });
@@ -56,50 +56,39 @@ export default function NewMemberPage() {
     setError(null);
 
     try {
-      const supabase = createClient();
+      const memberData = {
+        full_name: formData.full_name,
+        date_of_birth: formData.date_of_birth || null,
+        gender: formData.gender || null,
+        nationality: formData.nationality || null,
+        parent_name: formData.parent_name || null,
+        parent_phone: formData.parent_phone || null,
+        parent_email: formData.parent_email || null,
+        emergency_contact: formData.emergency_contact || null,
+        emergency_phone: formData.emergency_phone || null,
+        address: formData.address || null,
+        notes: formData.notes || null,
+      };
 
-      // Insert team member
-      const { data: memberData, error: memberError } = await supabase
-        .from('team_members')
-        .insert({
-          team_id: teamId,
-          full_name: formData.full_name,
-          date_of_birth: formData.date_of_birth || null,
-          gender: formData.gender || null,
-          nationality: formData.nationality || null,
-          parent_name: formData.parent_name || null,
-          parent_phone: formData.parent_phone || null,
-          parent_email: formData.parent_email || null,
-          emergency_contact: formData.emergency_contact || null,
-          emergency_phone: formData.emergency_phone || null,
-          address: formData.address || null,
-          notes: formData.notes || null,
-        })
-        .select()
-        .single();
+      const medicalData = (formData.blood_type || formData.allergies || formData.medications || formData.medical_conditions) ? {
+        blood_type: formData.blood_type || null,
+        allergies: formData.allergies || null,
+        medications: formData.medications || null,
+        medical_conditions: formData.medical_conditions || null,
+        insurance_provider: formData.insurance_provider || null,
+        insurance_number: formData.insurance_number || null,
+        doctor_name: formData.doctor_name || null,
+        doctor_phone: formData.doctor_phone || null,
+      } : undefined;
 
-      if (memberError) throw memberError;
+      const { member, error: createError } = await createMember(teamId, memberData, medicalData);
 
-      // Insert medical record if any medical info provided
-      if (formData.blood_type || formData.allergies || formData.medications || formData.medical_conditions) {
-        const { error: medicalError } = await supabase
-          .from('medical_records')
-          .insert({
-            member_id: memberData.id,
-            blood_type: formData.blood_type || null,
-            allergies: formData.allergies || null,
-            medications: formData.medications || null,
-            medical_conditions: formData.medical_conditions || null,
-            insurance_provider: formData.insurance_provider || null,
-            insurance_number: formData.insurance_number || null,
-            doctor_name: formData.doctor_name || null,
-            doctor_phone: formData.doctor_phone || null,
-          });
-
-        if (medicalError) console.error('Error creating medical record:', medicalError);
+      if (createError) {
+        setError(createError);
+        setLoading(false);
+        return;
       }
 
-      // Redirect back to team page
       router.push(`/dashboard/teams/${teamId}`);
     } catch (err) {
       console.error('Error:', err);
