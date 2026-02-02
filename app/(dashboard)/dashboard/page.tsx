@@ -5,23 +5,32 @@ import { UpcomingEvents } from '@/app/components/dashboard/UpcomingEvents';
 import { AttendanceTrend } from '@/app/components/dashboard/AttendanceTrend';
 import { useTranslation } from '@/app/hooks/useTranslation';
 import { Card, CardContent } from '@/components/ui/card';
-import { Users, UsersRound, TrendingUp } from 'lucide-react';
+import { Users, UsersRound, TrendingUp, Stethoscope } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { getDashboardStats, getUpcomingEvents } from '@/app/actions/dashboard';
+import { getDashboardStats, getUpcomingEvents, getAttendanceTrend } from '@/app/actions/dashboard';
+import { LoadingSpinner } from '@/app/components/ui/loading-spinner';
 
 import { DEMO_ATTENDANCE_TREND } from '@/lib/demoData';
 
 export default function DashboardOverviewPage() {
   const { t } = useTranslation();
 
-  const [stats, setStats] = useState<{ totalScouts: number; activeTeams: number; attendanceRate: number } | null>(null);
+  const [stats, setStats] = useState<{ totalScouts: number; activeTeams: number; attendanceRate: number; healthReportsCount: number } | null>(null);
   const [events, setEvents] = useState<any[]>([]);
+  const [trendData, setTrendData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      const [statsRes, eventsRes] = await Promise.all([getDashboardStats(), getUpcomingEvents()]);
+      const [statsRes, eventsRes, trendRes] = await Promise.all([
+        getDashboardStats(),
+        getUpcomingEvents(),
+        getAttendanceTrend()
+      ]);
       setStats(statsRes);
       setEvents(eventsRes as any[]);
+      setTrendData(trendRes);
+      setLoading(false);
     }
 
     fetchData();
@@ -42,47 +51,73 @@ export default function DashboardOverviewPage() {
     });
   }, [events]);
 
+  if (loading || !stats) {
+    return (
+      <PageShell title={t('dashboard.sidebar.overview')}>
+        <LoadingSpinner />
+      </PageShell>
+    );
+  }
+
   return (
     <PageShell title={t('dashboard.sidebar.overview')}>
       {/* Stats Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {/* Total Scouts */}
+        <Card className="border-none bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative overflow-hidden group">
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
-                <Users className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300">
+                <Users className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">{t('dashboard.overview.totalScouts')}</p>
-                <p className="text-3xl font-bold text-foreground">{stats?.totalScouts ?? '—'}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{t('dashboard.overview.totalScouts')}</p>
+                <p className="text-3xl font-black text-slate-900">{stats.totalScouts}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border-emerald-500/20">
+        {/* Active Teams */}
+        <Card className="border-none bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative overflow-hidden group">
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                <UsersRound className="w-6 h-6 text-emerald-600" />
+              <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300">
+                <UsersRound className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">{t('dashboard.overview.activeTeams')}</p>
-                <p className="text-3xl font-bold text-foreground">{stats?.activeTeams ?? '—'}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{t('dashboard.overview.activeTeams')}</p>
+                <p className="text-3xl font-black text-slate-900">{stats.activeTeams}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-500/5 border-amber-500/20 sm:col-span-2 lg:col-span-1">
+        {/* Attendance Rate */}
+        <Card className="border-none bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative overflow-hidden group">
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-amber-600" />
+              <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300">
+                <TrendingUp className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">{t('dashboard.overview.attendanceRate')}</p>
-                <p className="text-3xl font-bold text-foreground">{stats ? `${stats.attendanceRate}%` : '—'}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{t('dashboard.overview.attendanceRate')}</p>
+                <p className="text-3xl font-black text-slate-900">{stats.attendanceRate}%</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Medical Reports */}
+        <Card className="border-none bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative overflow-hidden group">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300">
+                <Stethoscope className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{t('dashboard.overview.healthReports')}</p>
+                <p className="text-3xl font-black text-slate-900">{stats.healthReportsCount}</p>
               </div>
             </div>
           </CardContent>
@@ -99,7 +134,7 @@ export default function DashboardOverviewPage() {
 
         {/* Attendance Trend */}
         <AttendanceTrend
-          data={[...DEMO_ATTENDANCE_TREND]}
+          data={trendData.length > 0 ? trendData : [...DEMO_ATTENDANCE_TREND]}
           title={t('dashboard.overview.attendanceTrend')}
         />
       </div>

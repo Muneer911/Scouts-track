@@ -15,7 +15,7 @@ export function FinalCTA() {
         backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
         backgroundSize: '40px 40px'
       }} />
-      
+
       <div className="relative max-w-4xl mx-auto text-center">
         <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-tight">
           {t('finalCta.title')}
@@ -35,7 +35,7 @@ export function FinalCTA() {
           <Link href="/login">
             <Button
               variant="outline"
-              className="text-primary-foreground border-2 border-primary-foreground/30 hover:border-primary-foreground hover:bg-primary-foreground/10 min-w-[200px] px-8 py-4 text-base"
+              className="bg-background text-foreground hover:bg-background/90 min-w-[200px] px-8 py-4 text-base shadow-lg"
             >
               {t('finalCta.ctaSecondary')}
             </Button>
